@@ -56,6 +56,9 @@ check1:
 
 	CMP R0, #42
 	BEQ check2
+
+	CMP R0, #54
+	BEQ check2
 	B loop
 
 check2:
@@ -72,6 +75,9 @@ nocheck1:
 
 	@ check if key is a shift
         CMP R0, #42
+        BEQ shifter
+
+        CMP R0, #54
         BEQ shifter
         B nonshift
 
