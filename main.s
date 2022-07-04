@@ -7,14 +7,14 @@ _start:
         LDR R0, =dest
         LDR R1, =02101
         MOV R2, #420
-        SWI #0
+        SVC #0
         MOV R11, R0
 
         @ open source file
         MOV R7, #5
         LDR R0, =source
         MOV R1, #0
-        SWI #0
+        SVC #0
         MOV R12, R0
 
         @ check root privileges for reading source file
@@ -28,7 +28,7 @@ loop:
         MOV R0, R12
         LDR R1, =input_event
         MOV R2, #16
-        SWI #0
+        SVC #0
 
         @ save input.type
         LDR R0, =input_event
@@ -123,7 +123,7 @@ write:
         MOV R0, R11
         LDR R1, =character
         MOV R2, #1
-        SWI #0
+        SVC #0
 
         @ get next character
         B loop
@@ -131,7 +131,7 @@ write:
 _end:
         @ for clean exit
         MOV R7, #1
-        SWI #0
+        SVC #0
 
 error:
         @ print error message to stdout
@@ -139,7 +139,7 @@ error:
         MOV R0, #2
         LDR R1, =errMsg
         LDR R2, =lenErrMsg
-        SWI #0
+        SVC #0
         B _end
 
 .section .data
