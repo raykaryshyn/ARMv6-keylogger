@@ -7,7 +7,7 @@ _start:
         MOV   R7, #5                     // open syscall
         LDR   R0, =dest
         LDR   R1, =02101                 // O_WRONLY | O_CREAT | O_APPEND
-        MOV   R2, #0644                  // S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
+        MOV   R2, #00644                 // S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
         SVC   #0
         MOV   R11, R0                    // save returned file handler
 
