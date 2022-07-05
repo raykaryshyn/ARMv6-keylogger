@@ -68,7 +68,7 @@ checkShiftRelease:
 releaseShift:
         LDR R9, =shift
         MOV R8, #0
-        STR R8, [R9]
+        STRB R8, [R9]
         B loop
 
 skipShiftReleaseCheck:
@@ -89,14 +89,14 @@ setShift:
         @ set shift flag to 1
         LDR R9, =shift
         MOV R8, #1
-        STR R8, [R9]
+        STRB R8, [R9]
         B loop
 
 checkShiftSet:
         @ use shift flag to determine which case to use
         LDR R9, =shift
-        LDR R8, [R9]
-        AND R8, R8, #1
+        LDRB R8, [R9]
+        @AND R8, R8, #1
         CMP R8, #0
         BEQ lower
 
@@ -116,7 +116,7 @@ write:
         AND R0, R0, #0xFF
         MOV R10, R0
         LDR R9, =character
-        STR R10, [R9]
+        STRB R10, [R9]
 
         @ write character to destination file
         MOV R7, #4
@@ -148,12 +148,12 @@ error:
 
         lowercase: .ascii "??1234567890-=\b\tqwertyuiop[]\n?asdfghjkl;'`?\\zxcvbnm,./?*? ?????????????"
                    .ascii "789-456+1230.????????????\n?/??????????????????????????????????????????????"
-        uppercase: .ascii "??!@#$%^&*()_+??QWERTYUIOP{}\n?ASDFGHJKL:\"~?|ZXCVBNM<>????????????????????"
+        uppercase: .ascii "??!@#$%^&*()_+??QWERTYUIOP{}\n?ASDFGHJKL:\"~?|ZXCVBNM<>???? ???????????????"
 
         errMsg: .asciz "Error: Program must be ran as root.\n"
         lenErrMsg = .-errMsg
 
         input_event: .fill 16, 1, 0
         character: .byte 0
-        .align 4
+        @.align 4
         shift: .byte 0
