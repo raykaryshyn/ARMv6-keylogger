@@ -33,8 +33,6 @@ loop:
         @ save input.type
         LDR R0, =input_event
         LDRH R0, [R0, #8]
-        @LDR R1, =0xFFFF
-        @AND R0, R0, R1
 
         @ skip if input.type == 0
         CMP R0, #0
@@ -56,7 +54,6 @@ loop:
 checkShiftRelease:
         LDR R0, =input_event
         LDRH R0, [R0, #10]
-        @AND R0, R0, R1
 
         CMP R0, #42
         BEQ releaseShift
@@ -75,7 +72,6 @@ skipShiftReleaseCheck:
         @ save input code (key)
         LDR R0, =input_event
         LDRH R0, [R0, #10]
-        @AND R0, R0, R1
 
         @ check if key is a shift
         CMP R0, #42    @ left shift key
@@ -96,7 +92,6 @@ checkShiftSet:
         @ use shift flag to determine which case to use
         LDR R9, =shift
         LDRB R8, [R9]
-        @AND R8, R8, #1
         CMP R8, #0
         BEQ lower
 
@@ -155,5 +150,4 @@ error:
 
         input_event: .fill 16, 1, 0
         character: .byte 0
-        @.align 4
         shift: .byte 0
