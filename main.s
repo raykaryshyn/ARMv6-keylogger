@@ -32,9 +32,9 @@ loop:
 
         @ save input.type
         LDR R0, =input_event
-        LDR R0, [R0, #8]
-        LDR R1, =0xFFFF
-        AND R0, R0, R1
+        LDRH R0, [R0, #8]
+        @LDR R1, =0xFFFF
+        @AND R0, R0, R1
 
         @ skip if input.type == 0
         CMP R0, #0
@@ -55,8 +55,8 @@ loop:
 
 checkShiftRelease:
         LDR R0, =input_event
-        LDR R0, [R0, #10]
-        AND R0, R0, R1
+        LDRH R0, [R0, #10]
+        @AND R0, R0, R1
 
         CMP R0, #42
         BEQ releaseShift
@@ -74,8 +74,8 @@ releaseShift:
 skipShiftReleaseCheck:
         @ save input code (key)
         LDR R0, =input_event
-        LDR R0, [R0, #10]
-        AND R0, R0, R1
+        LDRH R0, [R0, #10]
+        @AND R0, R0, R1
 
         @ check if key is a shift
         CMP R0, #42    @ left shift key
