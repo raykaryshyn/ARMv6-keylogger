@@ -20,8 +20,8 @@ _start:
 
         // check root privileges for reading source file
         ldr   r1, =0xFFFFFFF3            // error code for not being root
-        cmp   r0, r1
-        beq   error
+        cmp   r0, r1                     // test if returned value was error code
+        beq   error                      // jump to error handler
 
 loop:
         // get next input_event
@@ -35,13 +35,9 @@ loop:
         ldr   r0, =input_event
         ldrh  r0, [r0, #8]
 
-        // skip if input_event.type == 0
-        cmp   r0, #0
-        beq   loop
-
-        // skip if input_event.type == 4
-        cmp   r0, #4
-        beq   loop
+        // skip if input_event.type != 1
+        cmp   r0, #1
+        bne   loop
 
         // save input_event.value
         ldr   r0, =input_event
