@@ -18,3 +18,5 @@ make stop
 
 cat key.log
 ```
+
+*Note: Make sure the `source` file in main.s is the correct hardware buffer for the victim's keyboard.*
