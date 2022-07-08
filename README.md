@@ -19,4 +19,4 @@ make stop
 cat key.log
 ```
 
-*Note: Make sure the `source` file in main.s is the correct hardware buffer for the victim's keyboard.*
+*Note: Make sure the `source` variable in main.s holds the correct /dev/input/eventX file path for the victim's keyboard.*
