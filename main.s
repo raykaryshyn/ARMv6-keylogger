@@ -35,7 +35,7 @@ loop:
         ldr   r0, =input_event
         ldrh  r0, [r0, #8]
 
-        // skip if input_event.type != 1
+        // skip if input_event.type != 1 (not EV_KEY, keypress or release)
         cmp   r0, #1
         bne   loop
 
@@ -95,20 +95,18 @@ checkShiftSet:
 upper:
         // shift flag was set to 1
         ldr   r1, =uppercase
-        ldr   r0, [r1, r0]
+        ldrb  r0, [r1, r0]
         b     write
 
 lower:
         // shift flag was set to 0
         ldr   r1, =lowercase
-        ldr   r0, [r1, r0]
+        ldrb  r0, [r1, r0]
 
 write:
         // save ascii code for current character
-        and   r0, r0, #0xFF
-        mov   r10, r0
         ldr   r9, =character
-        strb  r10, [r9]
+        strb  r0, [r9]
 
         // write character to destination file
         mov   r7, #4
